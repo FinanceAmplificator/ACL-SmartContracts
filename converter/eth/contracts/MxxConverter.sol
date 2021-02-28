@@ -91,9 +91,15 @@ contract MxxConverter is Ownable, ReentrancyGuard {
     uint256 public availableMxxAmt;
 
     /**
+     * @dev - The base index
+     */
+    uint256 public constant BASE_INDEX = 10_000;
+
+
+    /**
      * @dev - An incremental number to track the index of the next conversion.
      */
-    uint256 public index;
+    uint256 public index = BASE_INDEX;
 
     /**
      * @dev - An mapping for all conversion details.
@@ -156,44 +162,44 @@ contract MxxConverter is Ownable, ReentrancyGuard {
 
     /**
      * @dev This function allows owner to set a conversion as completed.
-     * @param _index - The index of the conversion
+     * @param _id - The index of the conversion
      * Access Control: Only Owner
      */
-    function completeConversion(uint256 _index)
+    function completeConversion(uint256 _id)
         external
         onlyOwner()
         nonReentrant()
     {
-        require(_index < index, "Index out of range");
+        require((_id >= BASE_INDEX) && (_id < index), "Index out of range");
 
-        ConversionDetails memory details = allConversions[_index];
+        ConversionDetails memory details = allConversions[_id];
         require(details.status == Status.New, "Invalid Status");
 
         ERC20(MXX_ADDRESS).safeTransfer(BURN_ADDRESS, details.amount);
 
         details.status = Status.Completed;
         details.endTime = uint48(now);
-        allConversions[_index] = details;
+        allConversions[_id] = details;
 
-        emit ConversionCompleted(_index);
+        emit ConversionCompleted(_id);
     }
 
     /**
      * @dev This function allows owner to set 2 or more conversions (in an index range) as completed.
-     * @param _indexFrom - The start index of the conversion
-     * @param _indexTo - The end index of the conversion
+     * @param _idFrom - The start index of the conversion
+     * @param _idTo - The end index of the conversion
      * Access Control: Only Owner
      */
-    function completeConversions(uint256 _indexFrom, uint256 _indexTo)
+    function completeConversions(uint256 _idFrom, uint256 _idTo)
         external
         onlyOwner()
         nonReentrant()
     {
-        require(_indexTo < index, "Index out of range");
-        require(_indexFrom < _indexTo, "Requires at least 2 indexes");
+        require((_idFrom >= BASE_INDEX) && (_idTo < index), "Index out of range");
+        require(_idFrom < _idTo, "Requires at least 2 indexes");
 
         uint totalBurnAmt;
-        for (uint256 n = _indexFrom; n <= _indexTo; n++) {
+        for (uint256 n = _idFrom; n <= _idTo; n++) {
 
             // Only process conversions for Status.New items
             if (allConversions[n].status == Status.New) {
@@ -206,28 +212,28 @@ contract MxxConverter is Ownable, ReentrancyGuard {
         if (totalBurnAmt != 0) {
             ERC20(MXX_ADDRESS).safeTransfer(BURN_ADDRESS, totalBurnAmt);
         }
-        emit ConversionsCompleted(_indexFrom, _indexTo, totalBurnAmt);
+        emit ConversionsCompleted(_idFrom, _idTo, totalBurnAmt);
     }
 
 
     /**
      * @dev This function allows owner to perform a refund for a conversion item.
-     * @param _index - The index of the conversion
+     * @param _id - The index of the conversion
      * Access Control: Only Owner
      */
-    function refund(uint256 _index) external onlyOwner() nonReentrant() {
-        require(_index < index, "Index out of range");
+    function refund(uint256 _id) external onlyOwner() nonReentrant() {
+        require(_id < index, "Index out of range");
 
-        ConversionDetails memory details = allConversions[_index];
+        ConversionDetails memory details = allConversions[_id];
         require(details.status == Status.New, "Invalid Status");
 
         ERC20(MXX_ADDRESS).safeTransfer(details.fromAddress, details.amount);
 
         details.status = Status.Refunded;
         details.endTime = uint48(now);
-        allConversions[_index] = details;
+        allConversions[_id] = details;
 
-        emit ConversionRefunded(_index);
+        emit ConversionRefunded(_id);
     }
 
     /**
@@ -238,5 +244,9 @@ contract MxxConverter is Ownable, ReentrancyGuard {
     function setFee(uint256 _fee) external onlyOwner() {
         require(_fee <= MAX_FEE_PCNT, "Max fee exceeded");
         feePcnt = _fee;
+    }
+
+    function getCount() external view returns(uint256) {
+        return index.sub(BASE_INDEX);
     }
 }
