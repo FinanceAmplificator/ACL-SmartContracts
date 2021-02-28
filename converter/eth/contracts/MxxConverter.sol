@@ -67,6 +67,7 @@ contract MxxConverter is Ownable, ReentrancyGuard {
         uint256 timeStamp
     );
     event ConversionCompleted(uint256 id);
+    event ConversionsCompleted(uint256 idFrom, uint256 idTo, uint256 totalBurnAmount);
     event ConversionRefunded(uint256 id);
 
     /**
@@ -176,6 +177,38 @@ contract MxxConverter is Ownable, ReentrancyGuard {
 
         emit ConversionCompleted(_index);
     }
+
+    /**
+     * @dev This function allows owner to set 2 or more conversions (in an index range) as completed.
+     * @param _indexFrom - The start index of the conversion
+     * @param _indexTo - The end index of the conversion
+     * Access Control: Only Owner
+     */
+    function completeConversions(uint256 _indexFrom, uint256 _indexTo)
+        external
+        onlyOwner()
+        nonReentrant()
+    {
+        require(_indexTo < index, "Index out of range");
+        require(_indexFrom < _indexTo, "Requires at least 2 indexes");
+
+        uint totalBurnAmt;
+        for (uint256 n = _indexFrom; n <= _indexTo; n++) {
+
+            // Only process conversions for Status.New items
+            if (allConversions[n].status == Status.New) {
+                allConversions[n].status = Status.Completed;
+                allConversions[n].endTime = uint48(now);
+                totalBurnAmt = totalBurnAmt.add(allConversions[n].amount);
+            }
+        }
+
+        if (totalBurnAmt != 0) {
+            ERC20(MXX_ADDRESS).safeTransfer(BURN_ADDRESS, totalBurnAmt);
+        }
+        emit ConversionsCompleted(_indexFrom, _indexTo, totalBurnAmt);
+    }
+
 
     /**
      * @dev This function allows owner to perform a refund for a conversion item.
