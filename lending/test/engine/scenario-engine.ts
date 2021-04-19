@@ -1,8 +1,4 @@
-import {
-  RATEMODE_STABLE,
-  RATEMODE_NONE,
-  RATEMODE_VARIABLE,
-} from "../../helpers/constants";
+import { RATEMODE_STABLE, RATEMODE_VARIABLE } from "../../helpers/constants";
 import {
   deposit,
   mint,
@@ -115,11 +111,9 @@ const executeAction = async (action: Action, users: string[]) => {
           throw `Invalid amount to borrow from the ${reserve} reserve`;
         }
 
-        let rateMode: string = RATEMODE_NONE;
+        let rateMode: string = RATEMODE_STABLE;
 
-        if (borrowRateMode === "none") {
-          RATEMODE_NONE;
-        } else if (borrowRateMode === "stable") {
+        if (borrowRateMode === "stable") {
           rateMode = RATEMODE_STABLE;
         } else if (borrowRateMode === "variable") {
           rateMode = RATEMODE_VARIABLE;

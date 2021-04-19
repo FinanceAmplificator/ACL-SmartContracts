@@ -1,4 +1,3 @@
-import { eContractid } from "./../../helpers/types";
 import { getErc20, getMERC20 } from "./../../helpers/contracts-getters";
 import { evmRevert, evmSnapshot, DRE } from "../../helpers/misc-utils";
 import { Signer } from "ethers";

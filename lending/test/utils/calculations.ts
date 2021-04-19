@@ -11,7 +11,6 @@ import {
   EXCESS_UTILIZATION_RATE,
   RAY,
   ONE_YEAR,
-  RATEMODE_NONE,
 } from "../../helpers/constants";
 import { IReserveParams } from "../../helpers/types";
 
@@ -45,11 +44,11 @@ export const calcExpectedUserDataAfterDeposit = (
     userDataBeforeAction.principalBorrowBalance;
   expectedUserData.borrowRateMode = userDataBeforeAction.borrowRateMode;
 
-  if (userDataBeforeAction.borrowRateMode === RATEMODE_NONE) {
-    expectedUserData.borrowRate = new BigNumber("0");
-  } else {
-    expectedUserData.borrowRate = userDataBeforeAction.borrowRate;
-  }
+  // if (userDataBeforeAction.borrowRateMode === RATEMODE_NONE) {
+  //   expectedUserData.borrowRate = new BigNumber("0");
+  // } else {
+  // }
+  expectedUserData.borrowRate = userDataBeforeAction.borrowRate;
 
   expectedUserData.liquidityRate = reserveDataAfterAction.liquidityRate;
 
@@ -145,11 +144,11 @@ export const calcExpectedUserDataAfterRedeem = (
 
   expectedUserData.borrowRateMode = userDataBeforeAction.borrowRateMode;
 
-  if (userDataBeforeAction.borrowRateMode === RATEMODE_NONE) {
-    expectedUserData.borrowRate = new BigNumber("0");
-  } else {
-    expectedUserData.borrowRate = userDataBeforeAction.borrowRate;
-  }
+  // if (userDataBeforeAction.borrowRateMode === RATEMODE_NONE) {
+  //   expectedUserData.borrowRate = new BigNumber("0");
+  // } else {
+  // }
+  expectedUserData.borrowRate = userDataBeforeAction.borrowRate;
 
   expectedUserData.liquidityRate = reserveDataAfterAction.liquidityRate;
 
@@ -708,7 +707,7 @@ export const calcExpectedUserDataAfterRepay = (
   if (expectedUserData.currentBorrowBalance.eq("0")) {
     //user repaid everything
     expectedUserData.borrowRate = new BigNumber("0");
-    expectedUserData.borrowRateMode = RATEMODE_NONE;
+    // expectedUserData.borrowRateMode = RATEMODE_NONE;
     expectedUserData.variableBorrowIndex = new BigNumber("0");
   } else {
     if (userDataBeforeAction.borrowRateMode === RATEMODE_STABLE) {
