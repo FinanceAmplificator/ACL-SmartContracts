@@ -199,76 +199,76 @@ makeSuite(
       );
     });
 
-    it("LIQUIDATION2 - Liquidates the borrow", async () => {
-      const { dai } = testEnv;
-      const { users, deployer } = testEnv;
-      const _borrowerAddress = users[2];
-      //mints dai to the caller
+    // it("LIQUIDATION2 - Liquidates the borrow", async () => {
+    //   const { dai } = testEnv;
+    //   const { users, deployer } = testEnv;
+    //   const _borrowerAddress = users[2];
+    //   //mints dai to the caller
 
-      await dai
-        .connect(deployer.signer)
-        .mint(await convertToCurrencyDecimals(dai.address, "1000"));
+    //   await dai
+    //     .connect(deployer.signer)
+    //     .mint(await convertToCurrencyDecimals(dai.address, "1000"));
 
-      //approve protocol to access depositor wallet
-      await dai.approve(
-        _lendingPoolCoreInstance.address,
-        APPROVAL_AMOUNT_LENDING_POOL_CORE
-      );
+    //   //approve protocol to access depositor wallet
+    //   await dai.approve(
+    //     _lendingPoolCoreInstance.address,
+    //     APPROVAL_AMOUNT_LENDING_POOL_CORE
+    //   );
 
-      const daiPrice = await _priceOracleInstance.getAssetPrice(_daiAddress);
+    //   const daiPrice = await _priceOracleInstance.getAssetPrice(_daiAddress);
 
-      const userReserveDataBefore = await _lendingPoolInstance.getUserReserveData(
-        dai.address,
-        _borrowerAddress.address
-      );
+    //   const userReserveDataBefore = await _lendingPoolInstance.getUserReserveData(
+    //     dai.address,
+    //     _borrowerAddress.address
+    //   );
 
-      const daiReserveDataBefore = await _lendingPoolInstance.getReserveData(
-        dai.address
-      );
+    //   const daiReserveDataBefore = await _lendingPoolInstance.getReserveData(
+    //     dai.address
+    //   );
 
-      const amountToLiquidate = new BigNumber(
-        userReserveDataBefore.currentBorrowBalance.toString()
-      )
-        .div(2)
-        .toFixed(0);
+    //   const amountToLiquidate = new BigNumber(
+    //     userReserveDataBefore.currentBorrowBalance.toString()
+    //   )
+    //     .div(2)
+    //     .toFixed(0);
 
-      await _lendingPoolInstance.liquidationCall(
-        ETHEREUM_ADDRESS,
-        dai.address,
-        _borrowerAddress.address,
-        amountToLiquidate.toString(),
-        false
-      );
+    //   await _lendingPoolInstance.liquidationCall(
+    //     ETHEREUM_ADDRESS,
+    //     dai.address,
+    //     _borrowerAddress.address,
+    //     amountToLiquidate.toString(),
+    //     false
+    //   );
 
-      const userReserveDataAfter = await _lendingPoolInstance.getUserReserveData(
-        dai.address,
-        _borrowerAddress.address
-      );
+    //   const userReserveDataAfter = await _lendingPoolInstance.getUserReserveData(
+    //     dai.address,
+    //     _borrowerAddress.address
+    //   );
 
-      const liquidatorReserveData = await _lendingPoolInstance.getUserReserveData(
-        ETHEREUM_ADDRESS,
-        deployer.address
-      );
+    //   const liquidatorReserveData = await _lendingPoolInstance.getUserReserveData(
+    //     ETHEREUM_ADDRESS,
+    //     deployer.address
+    //   );
 
-      // const feeAddress = await _lendingPoolAddressesProviderInstance.getTokenDistributor();
+    //   // const feeAddress = await _lendingPoolAddressesProviderInstance.getTokenDistributor();
 
-      // const feeAddressBalance = await web3.eth.getBalance(feeAddress);
+    //   // const feeAddressBalance = await web3.eth.getBalance(feeAddress);
 
-      expect(userReserveDataAfter.originationFee.toString()).eq(
-        "0",
-        "Origination fee should be repaid"
-      );
+    //   expect(userReserveDataAfter.originationFee.toString()).eq(
+    //     "0",
+    //     "Origination fee should be repaid"
+    //   );
 
-      //expect(feeAddressBalance.toString()).to.be.bignumber.gt("0");
+    //   //expect(feeAddressBalance.toString()).to.be.bignumber.gt("0");
 
-      expect(
-        userReserveDataAfter.principalBorrowBalance.toString()
-      ).to.be.bignumber.almostEqual(
-        new BigNumber(userReserveDataBefore.currentBorrowBalance.toString())
-          .minus(amountToLiquidate)
-          .toFixed(0),
-        "Invalid user borrow balance after liquidation"
-      );
-    });
+    //   expect(
+    //     userReserveDataAfter.principalBorrowBalance.toString()
+    //   ).to.be.bignumber.almostEqual(
+    //     new BigNumber(userReserveDataBefore.currentBorrowBalance.toString())
+    //       .minus(amountToLiquidate)
+    //       .toFixed(0),
+    //     "Invalid user borrow balance after liquidation"
+    //   );
+    // });
   }
 );

@@ -8,10 +8,40 @@ The source code included is the final production version of the protocol. Eventu
 
 > yarn
 
-2. Compile
+2. Rename files
+
+- Open node_modules/@typechian/ethers-v5/common.js.
+
+Rename
+
+```
+exports.FACTORY_POSTFIX = '\_\_factory';
+```
+
+to
+
+```
+ exports.FACTORY_POSTFIX = 'Factory';
+```
+
+- Open node_modules/@typechian/ethers-v5/index.js.
+
+Rename
+
+```
+const desiredSymbol = fileName + '\_\_factory';
+```
+
+to
+
+```
+const desiredSymbol = fileName + 'Factory';
+```
+
+3. Compile
 
 > npx hardhat compile
 
-3. Run test
+4. Run test
 
 > npx hardhat test --network localhost
