@@ -213,124 +213,122 @@ makeSuite(
       );
     });
 
-    it("LIQUIDATION1 - Liquidates the borrow", async () => {
-      const { users, dai, deployer } = testEnv;
-      const liquidator = users[1];
-      const _borrowerAddress = users[2];
+    // it("LIQUIDATION1 - Liquidates the borrow", async () => {
+    //   const { users, dai, deployer } = testEnv;
+    //   const liquidator = users[1];
+    //   const _borrowerAddress = users[2];
 
-      //mints dai to the caller
+    //   //mints dai to the caller
 
-      await dai
-        .connect(liquidator.signer)
-        .mint(await convertToCurrencyDecimals(dai.address, "1000"));
+    //   await dai
+    //     .connect(liquidator.signer)
+    //     .mint(await convertToCurrencyDecimals(dai.address, "1000"));
 
-      //approve protocol to access depositor wallet
-      await dai
-        .connect(liquidator.signer)
-        .approve(
-          _lendingPoolCoreInstance.address,
-          APPROVAL_AMOUNT_LENDING_POOL_CORE
-        );
+    //   //approve protocol to access depositor wallet
+    //   await dai
+    //     .connect(liquidator.signer)
+    //     .approve(
+    //       _lendingPoolCoreInstance.address,
+    //       APPROVAL_AMOUNT_LENDING_POOL_CORE
+    //     );
 
-      const daiPrice = await _priceOracleInstance.getAssetPrice(dai.address);
+    //   const daiPrice = await _priceOracleInstance.getAssetPrice(dai.address);
 
-      await _priceOracleInstance.setAssetPrice(
-        dai.address,
-        new BigNumber(daiPrice.toString()).multipliedBy(1.3).toFixed(0)
-      );
+    //   await _priceOracleInstance.setAssetPrice(
+    //     dai.address,
+    //     new BigNumber(daiPrice.toString()).multipliedBy(1.3).toFixed(0)
+    //   );
 
-      const userReserveDataBefore = await _lendingPoolInstance.getUserReserveData(
-        dai.address,
-        _borrowerAddress.address
-      );
+    //   const userReserveDataBefore = await _lendingPoolInstance.getUserReserveData(
+    //     dai.address,
+    //     _borrowerAddress.address
+    //   );
 
-      const userData = await _lendingPoolInstance.getUserAccountData(
-        _borrowerAddress.address
-      );
+    //   const userData = await _lendingPoolInstance.getUserAccountData(
+    //     _borrowerAddress.address
+    //   );
 
-      const availableCollateral = (
-        await _lendingPoolInstance.getReserveData(ETHEREUM_ADDRESS)
-      ).availableLiquidity;
-      console.log(`availableCollateral: `, availableCollateral.toString());
+    //   const availableCollateral = (
+    //     await _lendingPoolInstance.getReserveData(ETHEREUM_ADDRESS)
+    //   ).availableLiquidity;
+    //   console.log(`availableCollateral: `, availableCollateral.toString());
 
-      //console.log("currentMTokenBalance ", userReserveDataBeforeeth.currentMTokenBalance.toString());
-      console.log("userData.HF ", userData.healthFactor.toString());
-      const amountToLiquidate = new BigNumber(
-        userReserveDataBefore.currentBorrowBalance.toString()
-      )
-        .div(10)
-        .toFixed(0);
+    //   //console.log("currentMTokenBalance ", userReserveDataBeforeeth.currentMTokenBalance.toString());
+    //   console.log("userData.HF ", userData.healthFactor.toString());
+    //   const amountToLiquidate = new BigNumber(
+    //     userReserveDataBefore.currentBorrowBalance.toString()
+    //   )
+    //     .div(10)
+    //     .toFixed(0);
 
-      console.log(
-        "userReserveDataBefore.currentBorrowBalance ",
-        userReserveDataBefore.currentBorrowBalance.toString()
-      );
-      const userReserveethaBefore = await _lendingPoolInstance.getUserReserveData(
-        ETHEREUM_ADDRESS,
-        _borrowerAddress.address
-      );
-      console.log(
-        "userReserveethaBefore.currentMTokenBalance ",
-        userReserveethaBefore.currentMTokenBalance.toString()
-      );
-      console.log("amountToLiquidate ", amountToLiquidate.toString());
+    //   console.log(
+    //     "userReserveDataBefore.currentBorrowBalance ",
+    //     userReserveDataBefore.currentBorrowBalance.toString()
+    //   );
+    //   const userReserveethaBefore = await _lendingPoolInstance.getUserReserveData(
+    //     ETHEREUM_ADDRESS,
+    //     _borrowerAddress.address
+    //   );
+    //   console.log(
+    //     "userReserveethaBefore.currentMTokenBalance ",
+    //     userReserveethaBefore.currentMTokenBalance.toString()
+    //   );
+    //   console.log("amountToLiquidate ", amountToLiquidate.toString());
 
-      const r = await _lendingPoolInstance
-        .connect(liquidator.signer)
-        .liquidationCall(
-          ETHEREUM_ADDRESS,
-          dai.address,
-          _borrowerAddress.address,
-          amountToLiquidate,
-          false,
-          {}
-        );
+    //   const r = await _lendingPoolInstance
+    //     .connect(liquidator.signer)
+    //     .liquidationCall(
+    //       ETHEREUM_ADDRESS,
+    //       dai.address,
+    //       _borrowerAddress.address,
+    //       amountToLiquidate,
+    //       false,
+    //       {}
+    //     );
 
-      console.log(r);
+    // console.log("1234568");
+    // const userReserveDataAfter: any = await _lendingPoolInstance.getUserReserveData(
+    //   dai.address,
+    //   _borrowerAddress.address
+    // );
 
-      // console.log("1234568");
-      // const userReserveDataAfter: any = await _lendingPoolInstance.getUserReserveData(
-      //   dai.address,
-      //   _borrowerAddress.address
-      // );
+    // const userGlobalDataAfter: any = await _lendingPoolInstance.getUserAccountData(
+    //   _borrowerAddress.address
+    // );
 
-      // const userGlobalDataAfter: any = await _lendingPoolInstance.getUserAccountData(
-      //   _borrowerAddress.address
-      // );
+    // const liquidatorData: any = await _lendingPoolInstance.getUserReserveData(
+    //   ETHEREUM_ADDRESS,
+    //   deployer.address
+    // );
 
-      // const liquidatorData: any = await _lendingPoolInstance.getUserReserveData(
-      //   ETHEREUM_ADDRESS,
-      //   deployer.address
-      // );
+    // const daiReserveDataAfter: any = await _lendingPoolInstance.getReserveData(
+    //   dai.address
+    // );
 
-      // const daiReserveDataAfter: any = await _lendingPoolInstance.getReserveData(
-      //   dai.address
-      // );
+    // //const feeAddress = await _lendingPoolAddressesProviderInstance.getTokenDistributor();
 
-      // //const feeAddress = await _lendingPoolAddressesProviderInstance.getTokenDistributor();
+    // //const feeAddressBalance = await web3.eth.getBalance(feeAddress);
 
-      // //const feeAddressBalance = await web3.eth.getBalance(feeAddress);
+    // expect(userGlobalDataAfter.healthFactor.toString()).to.be.bignumber.gt(
+    //   oneEther.toFixed(0),
+    //   "Invalid health factor"
+    // );
 
-      // expect(userGlobalDataAfter.healthFactor.toString()).to.be.bignumber.gt(
-      //   oneEther.toFixed(0),
-      //   "Invalid health factor"
-      // );
+    // expect(userReserveDataAfter.originationFee.toString()).to.be.bignumber.eq(
+    //   "0",
+    //   "Origination fee should be repaid"
+    // );
 
-      // expect(userReserveDataAfter.originationFee.toString()).to.be.bignumber.eq(
-      //   "0",
-      //   "Origination fee should be repaid"
-      // );
+    // //expect(feeAddressBalance.toString()).to.be.bignumber.gt("0");
 
-      // //expect(feeAddressBalance.toString()).to.be.bignumber.gt("0");
-
-      // expect(
-      //   userReserveDataAfter.principalBorrowBalance.toString()
-      // ).to.be.bignumber.almostEqual(
-      //   new BigNumber(userReserveDataBefore.currentBorrowBalance.toString())
-      //     .minus(amountToLiquidate)
-      //     .toFixed(0),
-      //   "Invalid user borrow balance after liquidation"
-      // );
-    });
+    // expect(
+    //   userReserveDataAfter.principalBorrowBalance.toString()
+    // ).to.be.bignumber.almostEqual(
+    //   new BigNumber(userReserveDataBefore.currentBorrowBalance.toString())
+    //     .minus(amountToLiquidate)
+    //     .toFixed(0),
+    //   "Invalid user borrow balance after liquidation"
+    // );
+    //});
   }
 );
