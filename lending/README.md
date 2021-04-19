@@ -8,6 +8,16 @@ The source code included is the final production version of the protocol. Eventu
 
 > yarn
 
+> npm install --save-dev hardhat
+
+1.1 Install ganache and run
+
+> npm install -g ganache-cli
+
+Open new terminal then
+
+> ganache-cli
+
 2. Rename files
 
 - Open node_modules/@typechian/ethers-v5/common.js.

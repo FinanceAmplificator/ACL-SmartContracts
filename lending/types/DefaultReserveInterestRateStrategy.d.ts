@@ -22,16 +22,16 @@ import { FunctionFragment, EventFragment, Result } from "@ethersproject/abi";
 interface DefaultReserveInterestRateStrategyInterface
   extends ethers.utils.Interface {
   functions: {
-    "EXCESS_UTILIZATION_RATE()": FunctionFragment;
-    "OPTIMAL_UTILIZATION_RATE()": FunctionFragment;
     "addressesProvider()": FunctionFragment;
     "baseVariableBorrowRate()": FunctionFragment;
     "calculateInterestRates(address,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "excessUtilizationRate()": FunctionFragment;
     "getBaseVariableBorrowRate()": FunctionFragment;
     "getStableRateSlope1()": FunctionFragment;
     "getStableRateSlope2()": FunctionFragment;
     "getVariableRateSlope1()": FunctionFragment;
     "getVariableRateSlope2()": FunctionFragment;
+    "optimalUtilizationRate()": FunctionFragment;
     "reserve()": FunctionFragment;
     "stableRateSlope1()": FunctionFragment;
     "stableRateSlope2()": FunctionFragment;
@@ -39,14 +39,6 @@ interface DefaultReserveInterestRateStrategyInterface
     "variableRateSlope2()": FunctionFragment;
   };
 
-  encodeFunctionData(
-    functionFragment: "EXCESS_UTILIZATION_RATE",
-    values?: undefined
-  ): string;
-  encodeFunctionData(
-    functionFragment: "OPTIMAL_UTILIZATION_RATE",
-    values?: undefined
-  ): string;
   encodeFunctionData(
     functionFragment: "addressesProvider",
     values?: undefined
@@ -58,6 +50,10 @@ interface DefaultReserveInterestRateStrategyInterface
   encodeFunctionData(
     functionFragment: "calculateInterestRates",
     values: [string, BigNumberish, BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "excessUtilizationRate",
+    values?: undefined
   ): string;
   encodeFunctionData(
     functionFragment: "getBaseVariableBorrowRate",
@@ -77,6 +73,10 @@ interface DefaultReserveInterestRateStrategyInterface
   ): string;
   encodeFunctionData(
     functionFragment: "getVariableRateSlope2",
+    values?: undefined
+  ): string;
+  encodeFunctionData(
+    functionFragment: "optimalUtilizationRate",
     values?: undefined
   ): string;
   encodeFunctionData(functionFragment: "reserve", values?: undefined): string;
@@ -98,14 +98,6 @@ interface DefaultReserveInterestRateStrategyInterface
   ): string;
 
   decodeFunctionResult(
-    functionFragment: "EXCESS_UTILIZATION_RATE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
-    functionFragment: "OPTIMAL_UTILIZATION_RATE",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(
     functionFragment: "addressesProvider",
     data: BytesLike
   ): Result;
@@ -115,6 +107,10 @@ interface DefaultReserveInterestRateStrategyInterface
   ): Result;
   decodeFunctionResult(
     functionFragment: "calculateInterestRates",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "excessUtilizationRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -135,6 +131,10 @@ interface DefaultReserveInterestRateStrategyInterface
   ): Result;
   decodeFunctionResult(
     functionFragment: "getVariableRateSlope2",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "optimalUtilizationRate",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "reserve", data: BytesLike): Result;
@@ -172,30 +172,6 @@ export class DefaultReserveInterestRateStrategy extends Contract {
   interface: DefaultReserveInterestRateStrategyInterface;
 
   functions: {
-    EXCESS_UTILIZATION_RATE(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
-
-    "EXCESS_UTILIZATION_RATE()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
-
-    OPTIMAL_UTILIZATION_RATE(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
-
-    "OPTIMAL_UTILIZATION_RATE()"(
-      overrides?: CallOverrides
-    ): Promise<{
-      0: BigNumber;
-    }>;
-
     addressesProvider(
       overrides?: CallOverrides
     ): Promise<{
@@ -250,6 +226,18 @@ export class DefaultReserveInterestRateStrategy extends Contract {
       0: BigNumber;
       1: BigNumber;
       2: BigNumber;
+    }>;
+
+    excessUtilizationRate(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "excessUtilizationRate()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
     }>;
 
     getBaseVariableBorrowRate(
@@ -307,6 +295,18 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     }>;
 
     "getVariableRateSlope2()"(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    optimalUtilizationRate(
+      overrides?: CallOverrides
+    ): Promise<{
+      0: BigNumber;
+    }>;
+
+    "optimalUtilizationRate()"(
       overrides?: CallOverrides
     ): Promise<{
       0: BigNumber;
@@ -373,14 +373,6 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     }>;
   };
 
-  EXCESS_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "EXCESS_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-  OPTIMAL_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-  "OPTIMAL_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
   addressesProvider(overrides?: CallOverrides): Promise<string>;
 
   "addressesProvider()"(overrides?: CallOverrides): Promise<string>;
@@ -421,6 +413,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     2: BigNumber;
   }>;
 
+  excessUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "excessUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
+
   getBaseVariableBorrowRate(overrides?: CallOverrides): Promise<BigNumber>;
 
   "getBaseVariableBorrowRate()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -440,6 +436,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
   getVariableRateSlope2(overrides?: CallOverrides): Promise<BigNumber>;
 
   "getVariableRateSlope2()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+  optimalUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+  "optimalUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   reserve(overrides?: CallOverrides): Promise<string>;
 
@@ -462,14 +462,6 @@ export class DefaultReserveInterestRateStrategy extends Contract {
   "variableRateSlope2()"(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
-    EXCESS_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "EXCESS_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    OPTIMAL_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "OPTIMAL_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     addressesProvider(overrides?: CallOverrides): Promise<string>;
 
     "addressesProvider()"(overrides?: CallOverrides): Promise<string>;
@@ -510,6 +502,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
       2: BigNumber;
     }>;
 
+    excessUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "excessUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     getBaseVariableBorrowRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getBaseVariableBorrowRate()"(
@@ -531,6 +527,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     getVariableRateSlope2(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getVariableRateSlope2()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    optimalUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "optimalUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     reserve(overrides?: CallOverrides): Promise<string>;
 
@@ -556,14 +556,6 @@ export class DefaultReserveInterestRateStrategy extends Contract {
   filters: {};
 
   estimateGas: {
-    EXCESS_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "EXCESS_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
-    OPTIMAL_UTILIZATION_RATE(overrides?: CallOverrides): Promise<BigNumber>;
-
-    "OPTIMAL_UTILIZATION_RATE()"(overrides?: CallOverrides): Promise<BigNumber>;
-
     addressesProvider(overrides?: CallOverrides): Promise<BigNumber>;
 
     "addressesProvider()"(overrides?: CallOverrides): Promise<BigNumber>;
@@ -590,6 +582,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    excessUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "excessUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
+
     getBaseVariableBorrowRate(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getBaseVariableBorrowRate()"(
@@ -611,6 +607,10 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     getVariableRateSlope2(overrides?: CallOverrides): Promise<BigNumber>;
 
     "getVariableRateSlope2()"(overrides?: CallOverrides): Promise<BigNumber>;
+
+    optimalUtilizationRate(overrides?: CallOverrides): Promise<BigNumber>;
+
+    "optimalUtilizationRate()"(overrides?: CallOverrides): Promise<BigNumber>;
 
     reserve(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -634,22 +634,6 @@ export class DefaultReserveInterestRateStrategy extends Contract {
   };
 
   populateTransaction: {
-    EXCESS_UTILIZATION_RATE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "EXCESS_UTILIZATION_RATE()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    OPTIMAL_UTILIZATION_RATE(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
-    "OPTIMAL_UTILIZATION_RATE()"(
-      overrides?: CallOverrides
-    ): Promise<PopulatedTransaction>;
-
     addressesProvider(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     "addressesProvider()"(
@@ -679,6 +663,14 @@ export class DefaultReserveInterestRateStrategy extends Contract {
       _totalBorrowsStable: BigNumberish,
       _totalBorrowsVariable: BigNumberish,
       _averageStableBorrowRate: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    excessUtilizationRate(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "excessUtilizationRate()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
@@ -719,6 +711,14 @@ export class DefaultReserveInterestRateStrategy extends Contract {
     ): Promise<PopulatedTransaction>;
 
     "getVariableRateSlope2()"(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    optimalUtilizationRate(
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "optimalUtilizationRate()"(
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

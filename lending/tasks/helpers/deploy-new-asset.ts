@@ -92,6 +92,7 @@ WRONG RESERVE ASSET SETUP:
         strategyParams.variableRateSlope2,
         strategyParams.stableRateSlope1,
         strategyParams.stableRateSlope2,
+        "800000000000000000",
       ],
       verify
     );
